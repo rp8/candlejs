@@ -19,11 +19,14 @@ module.exports = function (grunt) {
       }
     },
     uglify: {
-      src: 'dist/candle.js',
-      dest: 'dist/candle.min.js',
       options: {
-        sourceMap: true,
-        sourceMapName: 'dist/candle.min.map'
+        banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' + '<%= grunt.template.today("yyyy-mm-dd") %> */',
+        sourceMap: true
+      },
+      dist: {
+        files: {
+          'dist/candle.min.js': ['dist/candle.js']
+        }
       }
 		},
     jshint: {  // grunt-contrib-jshint
@@ -35,9 +38,9 @@ module.exports = function (grunt) {
           '**/*.js',
           '!lab/*.js',
           '!test/*.js',
-          '!test/Modernizr/*.js',
           '!dist/*.js',
-          '!node_modules/**/*'
+          '!dist/*.map',
+          '!node_modules/**/*',
         ]
       }
     },
@@ -58,9 +61,12 @@ module.exports = function (grunt) {
     watch: {
       all: {
         files: [
-          '**/*.js',
+          '**/*.js',          
+          '!lab/*.js',
+          '!test/*.js',
+          '!dist/*.js',
+          '!dist/*.map',
           '!node_modules/**/*',
-          '!test/Modernizr/*.js'
         ],
         tasks: ['jshint', 'browserify', 'uglify'],
         options: {
@@ -83,5 +89,6 @@ module.exports = function (grunt) {
 
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.registerTask('test', ['mochaTest']);
 };

@@ -1,12 +1,108 @@
-# candlejs
-Candlestick Charting for Time Series  
+# ![candlejs](./icon.ico) candlejs  
 
-[![npm version](https://badge.fury.io/js/candlejs.svg)](http://badge.fury.io/js/candlejs)
+## Candlestick Charting for Time Series  
+**candlejs** is used for charting real-time market data such as stock or future prices. It's light weight and high performance, optimal for intra-day trading scenarios.
+
+[![License](https://img.shields.io/github/license/rp8/candlejs.svg)](./LICENSE.txt)
+[![npm](https://img.shields.io/npm/v/candlejs.svg)](https://www.npmjs/package/candlejs)
+[![npm](https://img.shields.io/npm/dt/candlejs.svg)](https://www.npmjs.com/package/candlejs)
 
 ![Example](candle.png)
 
-## Usage
+## Installations
+### Fork & Development
+```
+git clone https://github.com/rp8/candlejs.git
+cd candlejs
+npm install
+```
+### Use Only
+```
+npm install candlejs --save
+```
 
+## Usages
+```js
+var cjs = require('candle');
+```
+### TickSeries - tick time series
+```js
+var ticks = new cjs.TickSeries('AAPL');
+ticks.on('changed', () => {
+  ...
+};
+ticks.add(time, price, volume);
+ticks.trimOlldData(1000, 10000);
+ticks.clear();
+for var tick in ticks.data {
+  ...
+}
+```
+### Bars - Bar time series of intervals such as daily, hourly, 5 min, etc
+```js
+var dailyBars = new cjs.Bars('AAPL', 24*3600*1000);
+dailyBars.add(time, open, high, low, close, volume);
+dailyBars.addTick(tick);
+dailyBars.addTicks(ticks);
+dailyBars.clear();
+dailyBars.on('changed', () => {
+  ...
+});
+```
+### Simulator - Simulating price time series
+```js
+var s = new cjs.Simulator(0.10, 100.00, 100);
+s.onData((err, data) => {
+  ...
+});
+s.start();
+s.stop();
+```
+### CandleChart
+```js
+var chart = new cjs.CandleChart({candleWidth: 4});
+var bars = new cjs.Bars('AAPL', 24*3600*1000);
+chart.addSeries(bars);
+chart.outputTo(canvas);
+chart.render();
+chart.setDisplayRange(openTime, closeTime);
+...
+chart will follow the streaming data coming from bars.
+```
+### LineReader - Reading data from a local file
+```js
+var lr = new cjs.LineReader();
+var bars = new cjs.Bars('AAPL', 24*3600*1000);
+bars.sort(function(a, b) {
+  return a[0] - b[0];
+});
+
+var bars0 = [];
+lr.on('end', function() {
+  for (i = 0; i < bars0.length; i++) {
+    var b = bars0[i];
+    bars.add(b[0], b[1], b[2], b[3], b[4], b[5]);
+  }
+});
+
+lr.on('line', function (line, next) {
+  if (line.indexOf('Date') === -1) {
+    var bar = line.split(',');
+    bars0.push([
+      new Date(bar[0]).getTime(),
+      parseFloat(bar[1]), 
+      parseFloat(bar[2]), 
+      parseFloat(bar[3]), 
+      parseFloat(bar[4]), 
+      parseFloat(bar[5])
+    ]);
+  } 
+  next();
+});
+
+lr.read($('file').files[0]);
+```
+### HTML
 ```html
 <html>
 <head>
@@ -56,3 +152,13 @@ Candlestick Charting for Time Series
 </body>
 </html>
 ```
+
+## FAQ
+
+## Issues
+
+## Changelog
+
+## License
+*candlejs* is licensed under the [MIT License](https://opensource.org/licenses/MIT)
+© 2015-2017 [Ronggen Pan](https://github.com/rp8)

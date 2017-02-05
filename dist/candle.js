@@ -673,7 +673,7 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
     ctx.lineWidth = this.options.lineWidth;
 
     ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
-
+    
     this.drawAxes();
     this.drawCandles();
     this.drawStatus();
@@ -1234,7 +1234,7 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
 **/
 (function (exports) {
   'use strict';
-
+ 
   /**
    * represents a price simulator.
    * @vol: volatility, ex., 0.10
@@ -1256,14 +1256,14 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
       else {
         self.value -= self.vol*Math.random();
       }
-
+ 
       self.emit(null, [new Date().getTime(), self.value, self.getVolume()]);
 
       if (self.run) {
         setTimeout(self.nextTick, Math.random()*self.delay);
       }
     };
-
+ 
     /**
      * emits an event.
     **/
