@@ -29,7 +29,6 @@ Candlestick Charting for Time Series
     chart.outputTo($('chart'));
 
     var bars = new cjs.Bars('TSL', 3600*24*1000);
-    var bars0 = [];
     chart.addSeries(bars);
 
     var s = new cjs.Simulator(0.10, 99, 10);
