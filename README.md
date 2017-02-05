@@ -1,7 +1,7 @@
 # ![candlejs](./icon.ico) candlejs  
 
 ## Candlestick Charting for Time Series  
-**candlejs** is used for charting real-time market data such as stock or future prices. It's light weight and high performance, optimal for intra-day trading scenarios.
+**candlejs** is used for charting real-time market data such as stock or future prices. It's light weight and high performance with no dependency on other packages. It's optimal for intra-day trading scenarios.
 
 [![License](https://img.shields.io/github/license/rp8/candlejs.svg)](./LICENSE.txt)
 [![npm](https://img.shields.io/npm/v/candlejs.svg)](https://www.npmjs/package/candlejs)
@@ -25,7 +25,7 @@ npm install candlejs --save
 ```js
 var cjs = require('candle');
 ```
-### TickSeries - tick time series
+### TickSeries - Tick time series
 ```js
 var ticks = new cjs.TickSeries('AAPL');
 ticks.on('changed', () => {
@@ -44,10 +44,11 @@ var dailyBars = new cjs.Bars('AAPL', 24*3600*1000);
 dailyBars.add(time, open, high, low, close, volume);
 dailyBars.addTick(tick);
 dailyBars.addTicks(ticks);
-dailyBars.clear();
 dailyBars.on('changed', () => {
   ...
 });
+...
+dailyBars.clear();
 ```
 ### Simulator - Simulating price time series
 ```js
@@ -67,7 +68,7 @@ chart.outputTo(canvas);
 chart.render();
 chart.setDisplayRange(openTime, closeTime);
 ...
-chart will follow the streaming data coming from bars.
+chart will update with the streaming data coming from bars.
 ```
 ### LineReader - Reading data from a local file
 ```js
