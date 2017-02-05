@@ -3,7 +3,7 @@ Candlestick Charting for Time Series
 
 [![npm version](https://badge.fury.io/js/candlejs.svg)](http://badge.fury.io/js/candlejs)
 
-![CandleJS](https://github.com/rp8/candlejs/blob/master/candle.png =100x50)  
+<img src="https://github.com/rp8/candlejs/blob/master/candle.png" height="50"></>  
 
 ## Usage
 
