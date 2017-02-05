@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Chrome against localhost, with sourcemaps",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4200",
+      "sourceMaps": true,
+      "webRoot": "${workspaceRoot}",
+      "sourceMapPathOverrides": {
+        "webpack:///./*": "${webRoot}/*"
+      }
+    },
+    {
+      "name": "Attach to Chrome with files served from ./dist",
+      "type": "chrome",
+      "request": "attach",
+      "port": 9222,
+      "url": "http://localhost:4200",
+      "sourceMaps": true,
+      "webRoot": "${workspaceRoot}",
+      "sourceMapPathOverrides": {
+        "webpack:///./*": "${webRoot}/*"
+      }
+    }
+  ]
+}

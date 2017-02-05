@@ -1,0 +1,42 @@
+{
+  "name": "candlejs",
+  "description": "Candlestick Chart & Time Series",
+  "version": "0.1.1",
+  "license": "MIT",
+  "author": {
+    "name": "rp8",
+    "email": "rp8@competo.com"
+  },
+  "homepage": "https://github.com/rp8/candlejs",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rp8/candlejs.git"
+  },
+  "keywords": [
+    "tick",
+    "bar",
+    "time series",
+    "quote",
+    "chart",
+    "stock",
+    "futures",
+    "candlestick"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^3.14.0",
+    "grunt": "^1.0.1",
+    "grunt-browserify": "^5.0.0",
+    "grunt-contrib-jshint": "~1.1.0",
+    "grunt-contrib-watch": "~1.0.0",
+    "grunt-contrib-uglify": "*",
+    "grunt-mocha-test": "~0.13.2",
+    "jsdom": "^9.9.1",
+    "jsdom-global": "^2.1.1",
+    "matchdep": "~1.0.1",
+    "mocha": "~3.2.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  }
+}

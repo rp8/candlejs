@@ -1,0 +1,126 @@
+<html>
+<head>
+  <script type="text/javascript" src="../dist/candle.min.js"></script>
+</head>
+<body>
+  <button id="render">Render</button>
+  <button id="random">Random</button>
+  <button id="shift">Shift Right 10 Bars</button>
+  <button id="clear">Clear Bars</button>
+  <button id="newbar">New Bar</button>
+  <button id="newtick">New Tick</button>
+  <input type="file" id="file">
+  <button id="read">Read</button>
+  <hr>
+  <canvas id="chart" width="800" height="300"></canvas>
+
+  <script type="text/javascript">
+    function $(name) {
+      return document.getElementById(name);
+    };
+
+    var cjs = require('candle');
+
+    var canvas = $('chart');
+    var chart = new cjs.CandleChart({candleWidth: 4});
+    chart.outputTo(canvas);
+
+    var bars = new cjs.Bars('TSL', 3600*24*1000);
+    var bars0 = [];
+    chart.addSeries(bars);
+
+    var lr = new cjs.LineReader({chunkSize: 1024});
+    lr.on('error', function(err) {
+      console.log(err);
+    });
+
+    lr.on('end', function() {
+      console.log('read completed');
+      bars0.sort(function(a, b) {
+        return a[0] - b[0];
+      });
+      bars.clear();
+      for (i = 0; i < bars0.length; i++) {
+        var b = bars0[i];
+        bars.add(b[0], b[1], b[2], b[3], b[4], b[5]);
+      }
+
+      chart.render();
+      bars0 = [];
+    }); 
+
+    $('random').addEventListener('click', function() {
+      console.log('random...');
+
+      var s = new cjs.Simulator(0.10, 99, 10);
+      var openTime = new Date().getTime();
+      s.onData((err, data) => {
+        //console.log(data);
+        openTime += bars.interval/20;
+        bars.addTick([openTime, data[1], data[2]]);
+        chart.render();
+      });
+      s.start();
+    });
+
+    $('clear').addEventListener('click', function() {
+      console.log('clearing...');
+      bars.clear();
+      chart.render();
+    });
+
+    $('shift').addEventListener('click', function() {
+      console.log('shifting...');
+      chart.setDisplayRange(chart._p.openTime + 10*3600*24*1000, chart._p.closeTime);
+      chart.render();
+    });
+
+    $('render').addEventListener('click', function() {
+      console.log('rendering...');
+      chart.render();
+    });
+
+    $('newbar').addEventListener('click', function() {
+      console.log('adding a new bar...');
+
+      if (bars.data.length > 0) {
+        var bar = bars.data[0];
+        bars.add(bars.closeTime + bars.interval, bar.open, bar.close, bar.high + Math.random(), bar.close, bar.volume);
+      }
+      else {
+        bars.add(new Date(new Date().toDateString()).getTime(), 
+          12.8 + 2*Math.random(), 12.99 + Math.random(), 12.30 + Math.random(), 12.55 + Math.random(), 10000 + 1000*Math.random());
+      }   
+      chart.render();
+    });
+
+    $('newtick').addEventListener('click', function() {
+      console.log('adding a new tick...');
+      var lastBar = bars.data[bars.data.length - 1];
+      lastBar.add([lastBar.openTime + 60000, 12.5 + 2*Math.random(), 1]);
+      chart.render();
+    });
+
+    $('read').addEventListener('click', function(evt) {
+      lr.on('line', function (line, next) {
+        if (line.indexOf('Date') === -1) {
+          var bar = line.split(',');
+          bars0.push([
+            new Date(bar[0]).getTime(),
+            parseFloat(bar[1]), 
+            parseFloat(bar[2]), 
+            parseFloat(bar[3]), 
+            parseFloat(bar[4]), 
+            parseFloat(bar[5])
+          ]);
+        } 
+        next();
+      });
+
+      lr.read($('file').files[0]);
+    });
+
+  </script>
+
+</body>
+</html>
