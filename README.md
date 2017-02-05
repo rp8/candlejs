@@ -1,6 +1,8 @@
 # candlejs
 Candlestick Charting for Time Series  
 
+[![npm version](https://badge.fury.io/js/candlejs.svg)](http://badge.fury.io/js/candlejs)
+
 ![CandleJS](https://github.com/rp8/candlejs/blob/master/candle.png)  
 
 ## Usage
