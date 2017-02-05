@@ -1,7 +1,7 @@
 # candlejs
 Candlestick Charting for Time Series  
 
-[CandleJS]: https://github.com/rp8/candlejs/raw/master/candle.png
+![CandleJS](https://github.com/rp8/candlejs/blob/master/candle.png)  
 
 ## Usage
 
