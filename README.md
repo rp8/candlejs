@@ -4,7 +4,7 @@
 **candlejs** is used for charting real-time market data such as stock or future prices. It's light weight and high performance with no dependency on other packages. It's optimal for intra-day trading scenarios.
 
 [![License](https://img.shields.io/github/license/rp8/candlejs.svg)](./LICENSE.txt)
-[![npm](https://img.shields.io/npm/v/candlejs.svg)](https://www.npmjs/package/candlejs)
+[![npm](https://img.shields.io/npm/v/candlejs.svg)](https://www.npmjs.com/package/candlejs)
 [![npm](https://img.shields.io/npm/dt/candlejs.svg)](https://www.npmjs.com/package/candlejs)
 
 ![Example](candle.png)
@@ -32,7 +32,7 @@ ticks.on('changed', () => {
   ...
 };
 ticks.add(time, price, volume);
-ticks.trimOlldData(1000, 10000);
+ticks.trimOldData(1000, 10000);
 ticks.clear();
 for var tick in ticks.data {
   ...
@@ -162,4 +162,4 @@ lr.read($('file').files[0]);
 
 ## License
 *candlejs* is licensed under the [MIT License](https://opensource.org/licenses/MIT)
-© 2015-2017 [Ronggen Pan](https://github.com/rp8)
+© 2015-2019 [Ronggen Pan](https://github.com/rp8)
