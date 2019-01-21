@@ -5,6 +5,10 @@
 <body>
   <button id="start">Start</button>
   <button id="stop">Stop</button>
+  <button id="render">Render</button>
+  <button id="draw">Draw Price Line @</button>
+  <input id="text" type="text" value="resistence" />
+  <input id="price" type="text" value="99" />
   <hr>
   <canvas id="chart" width="800" height="300"></canvas>
 
@@ -41,7 +45,15 @@
       s.stop();
     });
 
-  </script>
+    $('draw').addEventListener('click', function() {
+      console.log('drawing a line ...');
+      chart.addYLine('red', $('text').value, parseFloat($('price').value));
+      chart.render();
+    });
+    $('render').addEventListener('click', function() {
+      console.log('rendering ...');
+      chart.render();
+    }); </script>
 
 </body>
 </html>

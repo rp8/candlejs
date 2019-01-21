@@ -3,9 +3,10 @@
   <script type="text/javascript" src="../dist/candle.min.js"></script>
 </head>
 <body>
-  <button id="render">Render</button>
   <button id="random">Random</button>
-  <button id="shift">Shift Right 10 Bars</button>
+  <button id="render">Render</button>
+  <button id="stop">Stop</button>
+  <button id="slide">Slide 10 Bars</button>
   <button id="clear">Clear Bars</button>
   <button id="newbar">New Bar</button>
   <button id="newtick">New Tick</button>
@@ -49,10 +50,11 @@
       bars0 = [];
     }); 
 
+    var s;
     $('random').addEventListener('click', function() {
       console.log('random...');
 
-      var s = new cjs.Simulator(0.10, 99, 10);
+      s = new cjs.Simulator(0.10, 99, 10);
       var openTime = new Date().getTime();
       s.onData((err, data) => {
         //console.log(data);
@@ -63,14 +65,21 @@
       s.start();
     });
 
+    $('stop').addEventListener('click', function() {
+      console.log('stopping...');
+      if (s) {
+        s.stop();
+      };
+    });
+
     $('clear').addEventListener('click', function() {
       console.log('clearing...');
       bars.clear();
       chart.render();
     });
 
-    $('shift').addEventListener('click', function() {
-      console.log('shifting...');
+    $('slide').addEventListener('click', function() {
+      console.log('sliding...');
       chart.setDisplayRange(chart._p.openTime + 10*3600*24*1000, chart._p.closeTime);
       chart.render();
     });

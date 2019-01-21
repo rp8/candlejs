@@ -1,4 +1,4 @@
-require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+require=(function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 /** 
  * CandleJS
  * https://github.com/rp8/candlejs
@@ -476,11 +476,14 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
     var self = this;
     this.data = [];
     this.options = extend({}, CandleChart.defaultOptions, options);
+    this.lines = [];
 
     var p = this._p = {};
     p.xMin = p.xMax = Number.NaN;
     p.openTime = p.closeTime = Number.NaN;
-    p.y3Max = function() { return self.canvas.height; };
+    p.y3Max = function() { 
+      return self.canvas.height; 
+    };
     p.y3Min = function() {
       return Math.round(self.canvas.height * (1 - self.options.sliderScale));
     };
@@ -490,8 +493,12 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
     p.y2Min = function() {
       return p.y2Max() - Math.round(self.canvas.height * self.options.volumeScale);
     };
-    p.y1Max = function() { return p.y2Min(); };
-    p.y1Min = function() { return 0; };
+    p.y1Max = function() { 
+      return p.y2Min(); 
+    };
+    p.y1Min = function() { 
+      return 0; 
+    };
 
     // time axis conversion to pixel
     this.xToPixel = function(x) {
@@ -676,6 +683,7 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
     
     this.drawAxes();
     this.drawCandles();
+    this.drawYLines();
     this.drawStatus();
 
     if (this.slider && this.options.useSlider) {
@@ -824,6 +832,9 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
     }
   };
 
+  /**
+   * draws current chart status on session and last bar.
+   */
   CandleChart.prototype.drawStatus = function() {
     var ctx = this.canvas.getContext('2d');
     var p = this._p;
@@ -842,6 +853,36 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
       }
     }
 
+  };
+
+  /**
+   *  draws a horizontal line at a price level
+   *  @color - #000, html color code
+   *  @text - string
+   *  @price - float
+   */
+  CandleChart.prototype.addYLine = function(color, text, price) {
+    this.lines.push({ color: color, text: text, y: price});
+  };
+
+  /**
+   *  draws horizontal lines
+   */
+  CandleChart.prototype.drawYLines = function() {
+    var ctx = this.canvas.getContext('2d');
+    for (var i = 0; i < this.lines.length; i++) {
+      var line = this.lines[i];
+      var y = this.sharpen(this.y1ToPixel(line.y));
+      ctx.strokeStyle = line.color;
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(this.canvas.width, y);
+      ctx.closePath();
+      ctx.stroke();      
+      ctx.font = this.options.textFont;
+      ctx.fillStyle = line.color;
+      ctx.fillText(line.text, this.canvas.width - 100, y - 5);
+    }
   };
 
   CandleChart.extend = extend;
@@ -1239,12 +1280,14 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
    * represents a price simulator.
    * @vol: volatility, ex., 0.10
    * @value: start value
-   * @delay: up to delay ms
+   * @delay: up to delay ms, default to 1000 ms
+   * @fixed: number of digits, default to 2 (0.01)
   **/
-  var Simulator = function (vol, value, delay) {
+  var Simulator = function (vol, value, delay, fixed) {
     this.vol = vol;
     this.value = value;
     this.delay = delay || 1000;
+    this.fixed = fixed || 2;
     this.subscribers = [];
     this.run = false;
     var self = this;
@@ -1257,7 +1300,7 @@ require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof requ
         self.value -= self.vol*Math.random();
       }
  
-      self.emit(null, [new Date().getTime(), self.value, self.getVolume()]);
+      self.emit(null, [new Date().getTime(), self.value.toFixed(self.fixed), self.getVolume()]);
 
       if (self.run) {
         setTimeout(self.nextTick, Math.random()*self.delay);

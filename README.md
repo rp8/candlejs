@@ -21,6 +21,12 @@ npm install
 npm install candlejs --save
 ```
 
+## Dev & Test
+1. npm run build
+2. open test/candle.html in Chrome to test simple simulator & chart
+3. open test/candle.html in Chrome to test more with tick data from files and simulator
+4. npm run test
+
 ## Usages
 ```js
 var cjs = require('candle');
@@ -159,7 +165,8 @@ lr.read($('file').files[0]);
 ## Issues
 
 ## Changelog
-
+1/20/2019: added fixed to fix number of digits, default to 2
+  var Simulator = function (vol, value, delay, fixed) {...}
 ## License
 *candlejs* is licensed under the [MIT License](https://opensource.org/licenses/MIT)
 © 2015-2019 [Ronggen Pan](https://github.com/rp8)
