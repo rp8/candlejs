@@ -167,10 +167,13 @@ lr.read($('file').files[0]);
 ## Changelog
 1/20/2019: 
 1. added fixed to fix number of digits, default to 2
+```js
     var Simulator = function (vol, value, delay, fixed) {...}
+```
 2. added new mthod to draw horizontal lines
+```js
     CandleChart.prototype.addYLine = function(color, text, price) {..}
-    
+```
 ## License
 *candlejs* is licensed under the [MIT License](https://opensource.org/licenses/MIT)
 © 2015-2019 [Ronggen Pan](https://github.com/rp8)
