@@ -166,11 +166,11 @@ lr.read($('file').files[0]);
 
 ## Changelog
 1/20/2019: 
-1. added fixed to fix number of digits, default to 2
+1. added a new parameter "fixed" to fix number of digits, default to 2
 ```js
     var Simulator = function (vol, value, delay, fixed) {...}
 ```
-2. added new mthod to draw horizontal lines
+2. added new method to draw horizontal lines
 ```js
     CandleChart.prototype.addYLine = function(color, text, price) {..}
 ```
